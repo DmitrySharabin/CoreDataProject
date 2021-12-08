@@ -9,40 +9,38 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) var moc
-//    @FetchRequest(sortDescriptors: [], predicate: nil) var ships: FetchedResults<Ship>
-//    @FetchRequest(sortDescriptors: [], predicate: NSPredicate(format: "universe == 'Star Wars'")) var ships: FetchedResults<Ship>
-//    @FetchRequest(sortDescriptors: [], predicate: NSPredicate(format: "universe == %@", "Star Wars")) var ships: FetchedResults<Ship>
-//    @FetchRequest(sortDescriptors: [], predicate: NSPredicate(format: "name < %@", "F")) var ships: FetchedResults<Ship>
-//    @FetchRequest(sortDescriptors: [], predicate: NSPredicate(format: "universe IN %@", ["Aliens", "Firefly", "Star Trek"])) var ships: FetchedResults<Ship>
-//    @FetchRequest(sortDescriptors: [], predicate: NSPredicate(format: "name BEGINSWITH %@", "E")) var ships: FetchedResults<Ship>
-//    @FetchRequest(sortDescriptors: [], predicate: NSPredicate(format: "name BEGINSWITH[c] %@", "e")) var ships: FetchedResults<Ship>
-    @FetchRequest(sortDescriptors: [], predicate: NSPredicate(format: "NOT name BEGINSWITH[c] %@", "e")) var ships: FetchedResults<Ship>
+    @State private var lastNameFilter = "A"
     
     var body: some View {
         VStack {
-            List(ships, id: \.self) { ship in
-                Text(ship.name ?? "Unknown name")
+//            FilteredList(filter: lastNameFilter)
+            FilteredList(filterKey: "lastName", filterValue: lastNameFilter) { (singer: Singer) in
+                Text("\(singer.wrappedFirstName) \(singer.wrappedLastName)")
             }
-        }
-        
-        Button("Add Examples") {
-            let ship1 = Ship(context: moc)
-            ship1.name = "Enterprise"
-            ship1.universe = "Star Trek"
             
-            let ship2 = Ship(context: moc)
-            ship2.name = "Defiant"
-            ship2.universe = "Star Trek"
+            Button("Add Examples") {
+                let taylor = Singer(context: moc)
+                taylor.firstName = "Taylor"
+                taylor.lastName = "Swift"
+                
+                let ed = Singer(context: moc)
+                ed.firstName = "Ed"
+                ed.lastName = "Sheeran"
+                
+                let adele = Singer(context: moc)
+                adele.firstName = "Adele"
+                adele.lastName = "Adkins"
+                
+                try? moc.save()
+            }
             
-            let ship3 = Ship(context: moc)
-            ship3.name = "Millennium Falcon"
-            ship3.universe = "Star Wars"
+            Button("Show A") {
+                lastNameFilter = "A"
+            }
             
-            let ship4 = Ship(context: moc)
-            ship4.name = "Executor"
-            ship4.universe = "Star Wars"
-            
-            try? moc.save()
+            Button("Show S") {
+                lastNameFilter = "S"
+            }
         }
     }
 }
