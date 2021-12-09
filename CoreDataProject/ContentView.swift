@@ -13,8 +13,7 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-//            FilteredList(filter: lastNameFilter)
-            FilteredList(filterKey: "lastName", filterValue: lastNameFilter) { (singer: Singer) in
+            FilteredList(filterKey: "lastName", filterValue: lastNameFilter, predicate: "BEGINSWITH") { (singer: Singer) in
                 Text("\(singer.wrappedFirstName) \(singer.wrappedLastName)")
             }
             
